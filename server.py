@@ -53,11 +53,12 @@ def largelanguage_model(video_stream, ll_model, ll_processor):
             output = ll_model.generate(**inputs, max_new_tokens=512)
             generated_text = ll_processor.batch_decode(output, skip_special_tokens=True)
             message = generated_text[0].split("ASSISTANT: \n")[1].strip()
+            print("New message posted")
             await websocket.send(message)
 
     print("Please reload your browser")
     # start running server so that messages can be sent
-    start_server = websockets.serve(send_text, "0.0.0.0", 6789)
+    start_server = websockets.serve(send_text, "", 6789)
     asyncio.get_event_loop().run_until_complete(start_server)
     asyncio.get_event_loop().run_forever()
     return
@@ -65,7 +66,7 @@ def largelanguage_model(video_stream, ll_model, ll_processor):
 
 # run the entire assistant
 def main():
-    video_stream = "../../360.mp4"
+    video_stream = "../360.mp4"
     # run preliminaries so application can be run
     od_model, ll_model, ll_processor = setup()
     # set up video as a separate thread
