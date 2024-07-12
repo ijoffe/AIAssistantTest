@@ -58,7 +58,7 @@
     <script>
         const messagesDiv = document.getElementById('messages');
 
-        const websocket = new WebSocket('ws://localhost:6789');
+        const websocket = new WebSocket('ws://100.76.114.38:6789');
 
         websocket.onmessage = function(event) {
             const newMessage = document.createElement('div');

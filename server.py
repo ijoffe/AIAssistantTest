@@ -57,7 +57,7 @@ def largelanguage_model(video_stream, ll_model, ll_processor):
 
     print("Please reload your browser")
     # start running server so that messages can be sent
-    start_server = websockets.serve(send_text, "localhost", 6789)
+    start_server = websockets.serve(send_text, "0.0.0.0", 6789)
     asyncio.get_event_loop().run_until_complete(start_server)
     asyncio.get_event_loop().run_forever()
     return
