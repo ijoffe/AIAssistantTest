@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Site Hazard Detection System</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .main-content, .message-feed {
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .main-content {
+            flex: 3;
+        }
+        .message-feed {
+            flex: 1;
+            border-left: 1px solid #ccc;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        iframe {
+            width: 100%;
+            height: 480px;
+        }
+        #messages {
+            margin-top: 20px;
+        }
+        #messages div {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <h1>Live View</h1>
+        <p>This is a live view of the construction site through a worker's hard hat. Important safety hazards are detected using AI and highlighted.</p>
+        <iframe
+            src="https://viewer.millicast.com?streamId=X6cJur/AIAssistantWebStream"
+            allowfullscreen>
+        </iframe>
+    </div>
+    <div class="message-feed">
+        <h2>Live Messages</h2>
+        <p>This is a live log of the construction site hazards detected. Important safety hazards are explained using AI.</p>
+        <div id="messages">
+        </div>
+    </div>
+
+    <script>
+        const messagesDiv = document.getElementById('messages');
+
+        const websocket = new WebSocket('ws://localhost:6789');
+
+        websocket.onmessage = function(event) {
+            const newMessage = document.createElement('div');
+            newMessage.textContent = event.data;
+            messagesDiv.appendChild(newMessage);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        };
+
+        websocket.onopen = function() {
+            console.log('WebSocket connection opened');
+        };
+
+        websocket.onclose = function() {
+            console.log('WebSocket connection closed');
+        };
+    </script>
+</body>
+</html>
