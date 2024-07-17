@@ -6,7 +6,6 @@ import threading
 import time
 import asyncio
 import websockets
-# import ssl
 
 
 # download and load the models being used
@@ -57,7 +56,7 @@ def largelanguage_model(video_stream, ll_model, ll_processor):
             res, frame = cap.read()
             prompt = "USER: You are a safety inspector tasked with analyzing a construction site for potential safety hazards. Review each image provided, identify and describe all hazards, explain why each is a hazard, and suggest ways to eliminate or reduce the danger of each. The goal is to make the construction site safer and prevent incidents.\nRespond clearly, concisely, and professionally only in the following format:\n**Hazard**: [Description of the hazard]\n**Explanation**: [Brief explanation of why it is a hazard]\n**Suggestion**: [Suggestion to eliminate or reduce the danger]\nDo not repeat previously reported hazards. If no hazards exist, respond only with \"**NONE**\".\n\nUSER: <image>\n\nASSISTANT: "
             inputs = ll_processor(prompt, images=[frame], padding=True, return_tensors="pt").to("cuda")
-            output = ll_model.generate(**inputs, max_new_tokens=256)
+            output = ll_model.generate(**inputs, max_new_tokens=512)
             generated_text = ll_processor.batch_decode(output, skip_special_tokens=True)
             message = generated_text[0].split("ASSISTANT: \n")[1].strip()
             print(f"New message posted:\n\"{message}\"")
@@ -73,9 +72,6 @@ def largelanguage_model(video_stream, ll_model, ll_processor):
 
     print("Please reload your browser")
     # start running server so that messages can be sent
-    # ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    # ssl_context.load_cert_chain(certfile="cert.pem", keyfile="key.pem")
-    # start_server = websockets.serve(manager, '', 40000, ssl=ssl_context)
     start_server = websockets.serve(manager, '', 40000)
     asyncio.get_event_loop().run_until_complete(start_server)
     asyncio.get_event_loop().create_task(send_text())
