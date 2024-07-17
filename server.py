@@ -6,6 +6,7 @@ import threading
 import time
 import asyncio
 import websockets
+import ssl
 
 
 # download and load the models being used
@@ -58,7 +59,9 @@ def largelanguage_model(video_stream, ll_model, ll_processor):
 
     print("Please reload your browser")
     # start running server so that messages can be sent
-    start_server = websockets.serve(send_text, "", 6789)
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    ssl_context.load_cert_chain(certfile="cert.pem", keyfile="key.pem")
+    start_server = websockets.serve(send_text, '0.0.0.0', 40000)
     asyncio.get_event_loop().run_until_complete(start_server)
     asyncio.get_event_loop().run_forever()
     return
