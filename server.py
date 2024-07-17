@@ -61,7 +61,7 @@ def largelanguage_model(video_stream, ll_model, ll_processor):
     # start running server so that messages can be sent
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     ssl_context.load_cert_chain(certfile="cert.pem", keyfile="key.pem")
-    start_server = websockets.serve(send_text, '0.0.0.0', 40000)
+    start_server = websockets.serve(send_text, '0.0.0.0', 40000, ssl=ssl_context)
     asyncio.get_event_loop().run_until_complete(start_server)
     asyncio.get_event_loop().run_forever()
     return
