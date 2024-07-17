@@ -48,30 +48,28 @@ def largelanguage_model(video_stream, ll_model, ll_processor):
     fps = cap.get(cv2.CAP_PROP_FPS)
 
     # define functions and code to transmit periodic messages
-    connected_clients = set()
+    clients = set()
 
     async def send_text():
         await asyncio.sleep(5)
         while True:
             cap.set(cv2.CAP_PROP_POS_FRAMES, (time.time()-start_time)*fps-1)
             res, frame = cap.read()
-            # prompt and receive output from the large language model
             prompt = "USER: You are a safety inspector tasked with analyzing a construction site for potential safety hazards. Review each image provided, identify and describe all hazards, explain why each is a hazard, and suggest ways to eliminate or reduce the danger of each. The goal is to make the construction site safer and prevent incidents.\nRespond clearly, concisely, and professionally only in the following format:\n**Hazard**: [Description of the hazard]\n**Explanation**: [Brief explanation of why it is a hazard]\n**Suggestion**: [Suggestion to eliminate or reduce the danger]\nDo not repeat previously reported hazards. If no hazards exist, respond only with \"**NONE**\".\n\nUSER: <image>\n\nASSISTANT: "
             inputs = ll_processor(prompt, images=[frame], padding=True, return_tensors="pt").to("cuda")
             output = ll_model.generate(**inputs, max_new_tokens=256)
             generated_text = ll_processor.batch_decode(output, skip_special_tokens=True)
             message = generated_text[0].split("ASSISTANT: \n")[1].strip()
             print(f"New message posted:\n\"{message}\"")
-            if connected_clients:
-                await asyncio.wait([client.send(message) for client in connected_clients])
+            for client in clients:
+                await client.send(message)
 
     async def manager(websocket, path):
-        connected_clients.add(websocket)
+        clients.add(websocket)
         try:
-            async for message in websocket:
-                pass
+            await websocket.wait_closed()
         finally:
-            connected_clients.remove(websocket)
+            clients.remove(websocket)
 
     print("Please reload your browser")
     # start running server so that messages can be sent
