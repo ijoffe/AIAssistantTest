@@ -16,7 +16,7 @@ def setup():
     model_id = "llava-hf/llava-1.5-7b-hf"
     quantization_config = BitsAndBytesConfig(
         load_in_4bit=True,
-        bnb_4bit_compute_dtype=torch.float16
+        bnb_4bit_compute_dtype=torch.float16,
     )
     ll_processor = AutoProcessor.from_pretrained(model_id)
     ll_model = LlavaForConditionalGeneration.from_pretrained(
@@ -81,7 +81,7 @@ def largelanguage_model(video_stream, ll_model, ll_processor):
 
 # run the entire assistant
 def main():
-    video_stream = "../360.mp4"
+    video_stream = "360.mp4"
     # run preliminaries so application can be run
     od_model, ll_model, ll_processor = setup()
     # set up video as a separate thread
