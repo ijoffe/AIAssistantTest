@@ -1,0 +1,8 @@
+accelerate
+bitsandbytes
+opencv-python
+pandas
+torch
+transformers
+ultralytics
+websockets
