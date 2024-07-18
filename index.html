@@ -3,17 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Construction Site Hazard Detection System</title>
+    <title>Construction Site Hazard Detection Safety System</title>
     <style>
         body {
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
+            flex-direction: column;
             margin: 0;
             padding: 0;
             font-family: 'Arial', sans-serif;
             background-color: #121212;
             color: #e0e0e0;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            margin: 20px 0 0 0;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .content {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin: 20px;
+            flex-grow: 1;
         }
         .main-content, .message-feed {
             padding: 20px;
@@ -21,7 +36,7 @@
             background-color: rgba(40, 40, 40, 0.9);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
             border-radius: 8px;
-            margin: 20px;
+            margin: 0 20px 20px 20px;
         }
         .main-content {
             flex: 3;
@@ -29,12 +44,12 @@
         .message-feed {
             flex: 1;
             border-left: none;
-            height: calc(100vh - 40px);
+            height: calc(100vh - 80px);
             overflow-y: auto;
         }
         iframe {
             width: 100%;
-            height: calc(100vh - 180px); /* Adjust the height to fit better */
+            height: calc(100vh - 200px);
             border: none;
             border-radius: 8px;
         }
@@ -53,25 +68,29 @@
         h1 {
             font-family: 'Arial', sans-serif;
             font-weight: 700;
+            font-size: 24px;
+            margin-top: 0;
             color: #ffffff;
             text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="main-content">
-        <h1>Site View</h1>
-        <iframe
-            src="https://viewer.millicast.com?streamId=X6cJur/AIAssistantWebStream"
-            allowfullscreen>
-        </iframe>
-    </div>
-    <div class="message-feed">
-        <h1>Hazard Log</h1>
-        <div id="messages">
+    <header>Construction Site Hazard Detection Safety System</header>
+    <div class="content">
+        <div class="main-content">
+            <h1>Site View</h1>
+            <iframe
+                src="https://viewer.millicast.com?streamId=X6cJur/AIAssistantWebStream"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <div class="message-feed">
+            <h1>Hazard Log</h1>
+            <div id="messages">
+            </div>
         </div>
     </div>
-
     <script>
         const messagesDiv = document.getElementById('messages');
 

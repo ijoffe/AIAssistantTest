@@ -6,7 +6,9 @@ connected_clients = set()
 async def hello():
     while True:
         await asyncio.sleep(3)
-        message = "Hello from the remote server"
+        # message = input()
+        message = "**Hazard**: [Description of the hazard]\n**Explanation**: [Brief explanation of why it is a hazard]\n**Suggestion**: [Suggestion to eliminate or reduce the danger]"
+        print("Message posted")
         if connected_clients:
             await asyncio.wait([client.send(message) for client in connected_clients])
 
