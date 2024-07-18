@@ -50,7 +50,7 @@
             color: #e0e0e0;
             font-family: 'Courier New', Courier, monospace;
         }
-        h1, h2 {
+        h1 {
             font-family: 'Arial', sans-serif;
             font-weight: 700;
             color: #ffffff;
@@ -60,14 +60,14 @@
 </head>
 <body>
     <div class="main-content">
-        <h1>Live View</h1>
+        <h1>Site View</h1>
         <iframe
             src="https://viewer.millicast.com?streamId=X6cJur/AIAssistantWebStream"
             allowfullscreen>
         </iframe>
     </div>
     <div class="message-feed">
-        <h2>Live Messages</h2>
+        <h1>Hazard Log</h1>
         <div id="messages">
         </div>
     </div>
@@ -79,9 +79,10 @@
 
         websocket.onmessage = function(event) {
             const newMessage = document.createElement('div');
-            newMessage.textContent = event.data;
-            messagesDiv.appendChild(newMessage);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            newMessage.classList.add('message');
+            newMessage.innerHTML = parseMarkdown(event.data);
+            messagesDiv.insertBefore(newMessage, messagesDiv.firstChild);
+            messagesDiv.scrollTop = 0;
         };
 
         websocket.onopen = function() {
@@ -91,6 +92,12 @@
         websocket.onclose = function() {
             console.log('WebSocket connection closed');
         };
+
+        function parseMarkdown(text) {
+            text = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+            text = text.replace(/\n/g, '<br>');
+            return text;
+        }
     </script>
 </body>
 </html>
