@@ -1,0 +1,30 @@
+def objectdetection_model(video_input, video_output, od_model):
+    cap = cv2.VideoCapture(video_input)  # Change here: use /dev/video1 as input
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    out = cv2.VideoWriter(video_output, fourcc, 20.0, (640, 480))  # Change here: use /dev/video2 as output
+
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        results = od_model(frame)
+
+        # Draw bounding boxes and labels on the frame
+        for result in results:
+            boxes = result.boxes.xyxy
+            for box in boxes:
+                x1, y1, x2, y2 = map(int, box[:4])
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
+
+        out.write(frame)  # Write the frame to the output video
+
+    cap.release()
+    out.release()
+    return
+
+
+
+
+# sudo modprobe v4l2loopback devices=1 video_nr=1 card_label="VirtualCam"
+#gst-launch-1.0 thetauvcsrc mode=4K ! h264parse ! avdec_h264 ! videoconvert ! v4l2sink device=/dev/video1
