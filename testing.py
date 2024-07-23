@@ -108,7 +108,7 @@ def largelanguage_model(video_stream, ll_model, ll_processor):
 
 # run the entire assistant
 def main():
-    video_stream = 0  # Changed the video source to the default camera
+    video_stream = 1  # Changed the video source to the default camera // dev video 1 aka virtualcam for theta
     # run preliminaries so application can be run
     od_model, ll_model, ll_processor = setup()
     # set up video as a separate thread
