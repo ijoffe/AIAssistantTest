@@ -1,11 +1,26 @@
-def objectdetection_model(video_stream, od_model):
-    od_model.predict(
-        source=video_stream,
-        show=True,              # open window with live labels
-        vid_stride=25,           # skip every other frame for speed
-        verbose=False,          # don't print outputs
-        device='cpu',           # large language model gets to use gpu
-    )
+def objectdetection_model(video_input, video_output, od_model):
+    cap = cv2.VideoCapture(video_input)
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    out = cv2.VideoWriter(video_output, fourcc, 20.0, (640, 480))
+
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        results = od_model(frame)
+
+        # Draw bounding boxes and labels on the frame
+        for result in results:
+            boxes = result.boxes.xyxy
+            for box in boxes:
+                x1, y1, x2, y2 = map(int, box[:4])
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
+
+        out.write(frame)  # Write the frame to the output video
+
+    cap.release()
+    out.release()
     return
 
 
