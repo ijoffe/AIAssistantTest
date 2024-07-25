@@ -1,0 +1,40 @@
+The `gst-inspect-1.0` output confirms that the `thetauvcsrc` plugin is recognized by GStreamer and provides the expected capabilities. However, the error "streaming stopped, reason not-negotiated" still needs to be addressed. 
+
+Let's proceed with a few more steps to troubleshoot and attempt to resolve the issue.
+
+### Steps to Resolve
+
+1. **Set Environment Variables**:
+   - Set the environment variables for GStreamer plugin paths and the plugin scanner:
+     ```sh
+     export GST_PLUGIN_SCANNER=/usr/lib/aarch64-linux-gnu/gstreamer-1.0/gst-plugin-scanner
+     export GST_PLUGIN_PATH=/usr/lib/aarch64-linux-gnu/gstreamer-1.0
+     ```
+
+2. **Simplified Pipeline**:
+   - Test a simplified pipeline to ensure the Theta camera source is working correctly:
+     ```sh
+     gst-launch-1.0 thetauvcsrc mode=4K ! 'video/x-h264, width=3840, height=2160, framerate=30/1' ! fakesink
+     ```
+
+3. **Add Detailed Debugging**:
+   - Run the pipeline with detailed debugging enabled to get more information:
+     ```sh
+     GST_DEBUG=4 gst-launch-1.0 thetauvcsrc mode=4K ! 'video/x-h264, width=3840, height=2160, framerate=30/1' ! queue ! h264parse ! nvv4l2decoder ! queue ! nvvidconv ! 'video/x-raw(memory:NVMM), format=(string)I420, width=3840, height=2160' ! queue ! v4l2sink device=/dev/video1
+     ```
+
+4. **Alternative Pipeline**:
+   - Test an alternative pipeline to capture video directly to a file:
+     ```sh
+     gst-launch-1.0 thetauvcsrc mode=4K ! 'video/x-h264, width=3840, height=2160, framerate=30/1' ! queue ! h264parse ! qtmux ! filesink location=output.mp4
+     ```
+
+### Adjusted Pipeline with Explicit Caps
+
+Let's try an adjusted pipeline with explicit caps and `capsfilter`:
+
+```sh
+gst-launch-1.0 thetauvcsrc mode=4K ! 'video/x-h264, width=3840, height=2160, framerate=30/1' ! queue ! h264parse ! nvv4l2decoder ! queue ! nvvidconv ! 'video/x-raw(memory:NVMM), format=(string)I420, width=3840, height=2160' ! queue ! v4l2sink device=/dev/video1
+```
+
+If the simplified or alternative pipelines work, it indicates the problem might be with the downstream elements. If not, the issue is likely with the source or plugin setup. Detailed debugging will provide more information to identify the root cause of the problem.
