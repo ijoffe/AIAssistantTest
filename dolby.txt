@@ -2,8 +2,8 @@ gst-launch-1.0 videotestsrc ! videoconvert ! x264enc ! rtph264pay ! \
   'application/x-rtp,media=video,encoding-name=H264,payload=97,clock-rate=90000' ! \
   whip.sink_0 audiotestsrc wave=5 ! audioconvert ! opusenc ! rtpopuspay ! \
   'application/x-rtp,media=audio,encoding-name=OPUS,payload=96,clock-rate=48000,encoding-params=(string)2' ! \
-  whip.sink_1 whipsink name=whip auth-token=$DOLBYIO_BEARER_TOKEN \
-  whip-endpoint=$DOLBYIO_WHIP_ENDPOINT
+  whip.sink_1 whipsink name=whip auth-token=d1329ff661d55a66ce818ef0f7e74c02d295f67c1117f87bd50e0c5b5fdfcaee \
+  whip-endpoint=https://director.millicast.com/api/whip/AIAssistantWebStream
 
 
   
