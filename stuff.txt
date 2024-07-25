@@ -79,3 +79,7 @@ gst-launch-1.0 videotestsrc ! videoconvert ! x264enc bitrate=2500 ! rtph264pay !
 Regards,
  
 Robert```
+
+
+
+# gst-launch-1.0 thetauvcsrc mode=4K ! queue ! h264parse ! nvv4l2decoder ! queue ! nvvidconv ! queue ! v4l2sink device=/dev/video1
