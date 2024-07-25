@@ -51,3 +51,31 @@ sudo apt-get install gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly
 
 # Possible pipelines for nvidia hardware (accelrated)
 gst-launch-1.0 thetauvcsrc mode=4K ! queue ! h264parse ! nvh264dec ! queue ! nvvidconv ! queue ! v4l2sink device=/dev/video1
+
+
+
+```
+Robert Vogel (Dolby.io Support)
+
+Jul 24, 2024, 12:17 PDT
+
+Hello Mehmood,
+ 
+The error is Whip Sink is not installed.
+ 
+Let see if this helps install the GStreamer Plugin for WHIP.
+ 
+sudo apt install gstreamer1.0-x libgstreamer1.0-dev libgstreamer
+-plugins-base1.0-dev gstreamer1.0-plugins-bad libgstreamer-plugins-bad1.0-dev libsoup2.4-dev libjson-glib-dev libnice-dev autoconf libtool gtk-doc-tools libglib2.0-dev gstreamer1.0-nice libssl-dev libreadline-dev gstreamer1.0-plugins-ugly libsrtp0-dev libsrtp2-dev
+ 
+Let's check if it is available.
+ 
+gst-inspect-1.0 webrtchttp
+ 
+If it does show WHIP/WHEP
+
+gst-launch-1.0 videotestsrc ! videoconvert ! x264enc bitrate=2500 ! rtph264pay ! 'application/x-rtp,media=video,encoding-name=H264,payload=97,clock-rate=90000' ! whip.sink_0 audiotestsrc wave=sine ! audioconvert ! opusenc ! rtpopuspay ! 'application/x-rtp,media=audio,encoding-name=OPUS,payload=96,clock-rate=48000,encoding-params=(string)2' ! whip.sink_1 whipsink name=whip auth-token="d1329ff661d55a66ce818ef0f7e74c02d295f67c1117f87bd50e0c5b5fdfcaee" whip-endpoint="https://director.millicast.com/api/whip/AIAssistantWebStream" --gst-debug-level=3
+ 
+Regards,
+ 
+Robert```
