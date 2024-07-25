@@ -38,3 +38,7 @@ gst-launch-1.0 thetauvcsrc mode=4K ! 'video/x-h264, width=3840, height=2160, fra
 ```
 
 If the simplified or alternative pipelines work, it indicates the problem might be with the downstream elements. If not, the issue is likely with the source or plugin setup. Detailed debugging will provide more information to identify the root cause of the problem.
+
+
+sudo apt-get update
+sudo apt-get install --reinstall gstreamer1.0-tools gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav
