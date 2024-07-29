@@ -6,6 +6,8 @@ import threading
 import time
 import asyncio
 import websockets
+import base64
+import requests
 
 
 # download and load the models being used
