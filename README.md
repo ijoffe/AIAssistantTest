@@ -1,5 +1,5 @@
 # AIAssistantTest
 
 ```
-Project by Mehmood Ahmad and Issac Joffe
+Project by Mehmood Ahmad and Isaac Joffe
 ```
