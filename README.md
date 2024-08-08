@@ -3,7 +3,7 @@
 ```
 Project by Mehmood Ahmad and Isaac Joffe
 ```
-# Ricoh Theta X Setup
+# Ricoh Theta X Setup:
 ```
 First install (https://github.com/ricohapi/libuvc-theta)
 git clone https://github.com/ricohapi/libuvc-theta.git
